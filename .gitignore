@@ -1,0 +1,18 @@
+# Build artifacts
+*.o
+*.elf
+*.iso
+*.img
+isodir/
+
+# GRUB toolchain (large binaries)
+grub_tmp/
+
+# Logs
+*.log
+
+# Editor/IDE
+*.swp
+*.swo
+*~
+.vscode/
