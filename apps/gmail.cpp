@@ -1292,20 +1292,20 @@ extern "C" void app_launch_gmail() {
     g->current_folder = 0;
     g->smtp_state = SMTP_IDLE;
 
-    // Auto-login with hardcoded credentials
-    strcpy(g->email, "juliantheblaze@gmail.com");
-    g->email_len = 24;
-    strcpy(g->password, "uttd rsex pvuq kpat");
-    g->pass_len = 19;
-    g->logged_in = true;
-    g->view = VIEW_INBOX;
-    gmail_init_msgs(g);
-    // Also save to statics for consistency
-    strcpy(saved_email, g->email);
-    strcpy(saved_password, g->password);
-    saved_email_len = g->email_len;
-    saved_pass_len = g->pass_len;
-    has_saved_creds = true;
+    // Restore saved credentials from previous session if available
+    if (has_saved_creds && saved_email_len > 0) {
+        strcpy(g->email, saved_email);
+        g->email_len = saved_email_len;
+        strcpy(g->password, saved_password);
+        g->pass_len = saved_pass_len;
+        g->logged_in = true;
+        g->view = VIEW_INBOX;
+        gmail_init_msgs(g);
+    } else {
+        // Start at login screen - user enters credentials manually
+        g->logged_in = false;
+        g->view = VIEW_INBOX;
+    }
 
     w->userdata = g;
     w->on_draw = gmail_draw;
